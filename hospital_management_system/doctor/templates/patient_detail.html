@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+        {{ message }}
+        <button type="button" class="close-btn" onclick="this.parentElement.style.display='none'">&times;</button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="card">
+    <h2>Patient: {{ patient.name }}</h2>
+    
+    <div class="patient-details">
+        <div class="detail-item">
+            <strong>Age:</strong> {{ patient.age }}
+        </div>
+        <div class="detail-item">
+            <strong>Gender:</strong> {{ patient.gender }}
+        </div>
+        <div class="detail-item">
+            <strong>Contact:</strong> {{ patient.contact }}
+        </div>
+        <div class="detail-item">
+            <strong>Medical History:</strong> {{ patient.medical_history }}
+        </div>
+
+    </div>
+
+    <h3>Medical Records</h3>
+    <div class="records-container">
+        {% for record in medical_records %}
+            <div class="medical-record">
+                <p><strong>Doctor:</strong> {{ record.doctor }}</p>
+                <p><strong>Prescription:</strong> {{ record.prescription }}</p>
+                <p><strong>Notes:</strong> {{ record.notes }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="prescription-form">
+        <h3>Add Prescription</h3>
+        <form method="post" action="{% url 'add_prescription' patient.id %}">
+            {% csrf_token %}
+            <div>
+                <label for="prescription">Prescription:</label>
+                <input type="text" id="prescription" name="prescription" required>
+            </div>
+            <div>
+                <label for="notes">Notes:</label>
+                <textarea id="notes" name="notes"></textarea>
+            </div>
+            <button type="submit" class="btn">Add Prescription</button>
+        </form>
+    </div>
+</div>
+
+{% comment %} <a href="{% url 'doctor_dashboard' %}" class="back-link">← Back to Dashboard</a> {% endcomment %}
+<form action="{% url 'doctor_dashboard' %}" method="get">
+    <button type="submit" class="btn back-btn">← Back to Dashboard</button>
+</form>
+<style>
+        .btn {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    .back-btn {
+        background-color: transparent;
+        border: 1px solid #007bff;
+        color: #007bff;
+    }
+
+    .back-btn:hover {
+        background-color: #f0f0f0;
+    }
+    .messages {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .alert {
+        padding: 15px;
+        margin-bottom: 10px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        position: relative;
+    }
+
+    .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+
+    .alert-error {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+
+    .close-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: inherit;
+    }
+
+    .close-btn:hover {
+        opacity: 0.7;
+    }
+</style>
+{% endblock %}

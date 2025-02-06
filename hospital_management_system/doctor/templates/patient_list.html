@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+    <h2>Patient List</h2>
+    <ul class="patient-list">
+        {% for patient in patients %}
+            <li>
+                <a href="{% url 'patient_detail' patient.id %}">{{ patient.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<a href="{% url 'doctor_dashboard' %}" class="back-link">← Back to Dashboard</a>
+{% endblock %}

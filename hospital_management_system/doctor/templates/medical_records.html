@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+    <h2>Medical Records for Patient</h2>
+    <div class="records-container">
+        {% for record in records %}
+            <div class="medical-record">
+                <p><strong>Prescription:</strong> {{ record.prescription }}</p>
+                <p><strong>Notes:</strong> {{ record.notes }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<a href="{% url 'doctor_dashboard' %}" class="back-link">← Back to Dashboard</a>
+{% endblock %}
