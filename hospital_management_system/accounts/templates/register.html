@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Register</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="role">Role:</label>
+        <select name="role" id="role" required>
+            <option value="">Select Role</option>
+            <option value="doctor">Doctor</option>
+            <option value="patient">Patient</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" name="username" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+    </div>
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" name="name" required>
+    </div>
+    
+    <div id="doctor_fields" style="display: none;">
+        <div class="form-group">
+            <label for="qualification">Qualification:</label>
+            <input type="text" name="qualification">
+        </div>
+        <div class="form-group">
+            <label for="experience">Experience (years):</label>
+            <input type="number" name="experience" min="0">
+        </div>
+        <div class="form-group">
+            <label for="specialization">Specialization:</label>
+            <input type="text" name="specialization">
+        </div>
+    </div>
+    
+    <div id="patient_fields" style="display: none;">
+        <div class="form-group">
+            <label for="age">Age:</label>
+            <input type="number" name="age" min="0">
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select name="gender">
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <textarea name="address"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="contact">Contact:</label>
+            <input type="tel" name="contact">
+        </div>
+        <div class="form-group">
+            <label for="medical_history">Medical History:</label>
+            <textarea name="medical_history"></textarea>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <button type="submit">Register</button>
+    </div>
+</form>
+
+<script>
+    document.getElementById("role").addEventListener("change", function() {
+        const doctorFields = document.getElementById("doctor_fields");
+        const patientFields = document.getElementById("patient_fields");
+        
+        if (this.value === "doctor") {
+            doctorFields.style.display = "block";
+            patientFields.style.display = "none";
+        } else if (this.value === "patient") {
+            doctorFields.style.display = "none";
+            patientFields.style.display = "block";
+        } else {
+            doctorFields.style.display = "none";
+            patientFields.style.display = "none";
+        }
+    });
+</script>
+{% endblock %}
