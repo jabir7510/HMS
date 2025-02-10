@@ -9,6 +9,7 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client["hospital_management"]
 users_collection = db["users"]
 medical_records_collection = db["medical_records"]
+appointments_collection = db["appointments"]
 
 class DoctorDashboardView(View):
     def get(self, request):
@@ -59,6 +60,36 @@ class PatientDetailView(View):
             
         except Exception as e:
             return HttpResponseNotFound(f"Error retrieving patient: {str(e)}")
+
+class DoctorAppointmentsView(View):
+    def get(self, request):
+        if "username" not in request.session or request.session.get("role") != "doctor":
+            return redirect("login")
+
+        doctor_username = request.session["username"]
+        appointments = list(appointments_collection.find({
+            "doctor_username": doctor_username,
+            "status": "approved"
+        }))
+
+        for appointment in appointments:
+            appointment["id"] = str(appointment["_id"])
+
+        return render(request, "doctor_appointments.html", {"appointments": appointments})
+class AppointmentHistoryView(View):
+    def get(self, request):
+        if "username" not in request.session or request.session.get("role") != "doctor":
+            return redirect("login")
+
+        doctor_username = request.session["username"]
+        appointments = list(appointments_collection.find({
+            "doctor_username": doctor_username
+        }).sort("updated_at", -1))  # Sort by recent updates
+
+        for appointment in appointments:
+            appointment["id"] = str(appointment["_id"])
+
+        return render(request, "appointment_history.html", {"appointments": appointments})
 
 
 class AddPrescriptionView(View):

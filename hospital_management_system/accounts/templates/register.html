@@ -9,6 +9,7 @@
             <option value="">Select Role</option>
             <option value="doctor">Doctor</option>
             <option value="patient">Patient</option>
+            <option value="receptionist">Receptionist</option> <!-- Added Receptionist option -->
         </select>
     </div>
     <div class="form-group">
@@ -65,7 +66,15 @@
             <textarea name="medical_history"></textarea>
         </div>
     </div>
-    
+
+    <!-- New Receptionist Fields -->
+    <div id="receptionist_fields" style="display: none;">
+        <div class="form-group">
+            <label for="contact">Contact:</label>
+            <input type="tel" name="contact">
+        </div>
+    </div>
+
     <div class="form-group">
         <button type="submit">Register</button>
     </div>
@@ -75,16 +84,24 @@
     document.getElementById("role").addEventListener("change", function() {
         const doctorFields = document.getElementById("doctor_fields");
         const patientFields = document.getElementById("patient_fields");
-        
+        const receptionistFields = document.getElementById("receptionist_fields");
+
         if (this.value === "doctor") {
             doctorFields.style.display = "block";
             patientFields.style.display = "none";
+            receptionistFields.style.display = "none";
         } else if (this.value === "patient") {
             doctorFields.style.display = "none";
             patientFields.style.display = "block";
+            receptionistFields.style.display = "none";
+        } else if (this.value === "receptionist") {
+            doctorFields.style.display = "none";
+            patientFields.style.display = "none";
+            receptionistFields.style.display = "block";
         } else {
             doctorFields.style.display = "none";
             patientFields.style.display = "none";
+            receptionistFields.style.display = "none";
         }
     });
 </script>

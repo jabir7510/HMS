@@ -23,7 +23,7 @@ class RegisterView(View):
         password = make_password(request.POST.get("password"))
         name = request.POST.get("name")
         
-        if role not in ["doctor", "patient"]:
+        if role not in ["doctor", "patient", "receptionist"]:
             messages.error(request, "Invalid role selected!")
             return redirect("register")
         
@@ -35,6 +35,12 @@ class RegisterView(View):
                 "experience": request.POST.get("experience"),
                 "specialization": request.POST.get("specialization")
             })
+            
+        elif role == "receptionist":
+            user_data.update({
+                "contact": request.POST.get("contact"),
+            })
+                
         elif role == "patient":
             user_data.update({
                 "age": request.POST.get("age"),
@@ -43,10 +49,14 @@ class RegisterView(View):
                 "contact": request.POST.get("contact"),
                 "medical_history": request.POST.get("medical_history")
             })
-        
+
+        # Insert user data into MongoDB
         users_collection.insert_one(user_data)
         messages.success(request, "Registration successful! You can now login.")
+        
+        # Redirect to login page after successful registration
         return redirect("login")
+
 
 class LoginView(View):
     def get(self, request):
@@ -65,6 +75,8 @@ class LoginView(View):
                 return redirect("doctor_dashboard")
             elif user["role"] == "patient":
                 return redirect("patient_dashboard")
+            elif user["role"] == "receptionist":
+                return redirect("receptionist_dashboard")
             else:
                 return redirect("admin_dashboard")
         else:

@@ -5,17 +5,66 @@
     <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
 </div>
 
+<div class="navigation-buttons">
+    <a href="{% url 'doctor_appointments' %}" class="nav-btn">View Appointments</a>
+    <a href="{% url 'appointment_history' %}" class="nav-btn">Appointment History</a>
+</div>
+
 <div class="card">
     <h3>Your Patients</h3>
     <ul class="patient-list">
         {% for patient in patients %}
             <li>
-
                 <a href="{% url 'patient_detail' patient.id %}">{{ patient.name }}</a>
                 {% empty %}
                 <p>No patients found.</p>
             </li>
         {% endfor %}
     </ul>
+    <table>
+        <tr>
+            <th>Patient</th>
+            <th>Date</th>
+            <th>Time</th>
+        </tr>
+        {% for appointment in appointments %}
+        <tr>
+            <td>{{ appointment.patient_username }}</td>
+            <td>{{ appointment.date }}</td>
+            <td>{{ appointment.time }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 {% endblock %}
+
+<style>
+    .navigation-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .nav-btn {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background-color 0.3s, transform 0.2s;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .nav-btn:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+        .navigation-buttons {
+            flex-direction: column;
+        }
+    }
+</style>

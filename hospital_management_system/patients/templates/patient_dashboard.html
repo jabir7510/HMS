@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="dashboard-header">
+    <h2>Patient Dashboard</h2>
+    <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+</div>
+
+<div class="card">
+    <h3>Welcome, {{ patient.username }}{{  patient.name  }}</h3>
+
+    <!-- Display messages -->
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Display list of doctors -->
+    <h3>Available Doctors</h3>
+    <div class="table-container">
+        <table class="appointment-table">
+            <thead>
+                <tr>
+                    <th>Doctor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doctor in doctors %}
+                    <tr>
+                        <td>{{ doctor.username }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Display appointment history -->
+    <h3>Appointment History</h3>
+    <div class="table-container">
+        <table class="appointment-table">
+            <thead>
+                <tr>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                    <tr>
+                        <td>{{ appointment.doctor_username }}</td>
+                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.time }}</td>
+                        <td>{{ appointment.status }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Form to book a new appointment -->
+    <h3>Book Appointment</h3>
+    <form method="post" class="appointment-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="doctor_username">Doctor:</label>
+            <select name="doctor_username" id="doctor_username" required>
+                {% for doctor in doctors %}
+                    <option value="{{ doctor.username }}">{{ doctor.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="date" name="date" id="date" required>
+        </div>
+        <div class="form-group">
+            <label for="time">Time:</label>
+            <input type="time" name="time" id="time" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Book Appointment</button>
+    </form>
+</div>
+
+<style>
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .logout-btn {
+        background-color: var(--danger-color);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+
+    .logout-btn:hover {
+        background-color: #dc3545;
+    }
+
+    .card {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .messages {
+        margin-bottom: 1.5rem;
+    }
+
+    .message {
+        padding: 1rem;
+        background-color: var(--success-color);
+        color: white;
+        border-radius: 4px;
+        margin-bottom: 0.5rem;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        margin-top: 1rem;
+    }
+
+    .appointment-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .appointment-table th,
+    .appointment-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .appointment-table th {
+        background-color: #f8fafc;
+        font-weight: 600;
+        color: var(--secondary-color);
+    }
+
+    .appointment-table tr:hover {
+        background-color: #f8fafc;
+    }
+
+    .appointment-form {
+        margin-top: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+
+    .form-group select,
+    .form-group input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover {
+        background-color: #2563eb;
+    }
+
+    @media (max-width: 768px) {
+        .appointment-table th,
+        .appointment-table td {
+            padding: 0.75rem;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
